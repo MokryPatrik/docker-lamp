@@ -1,0 +1,4 @@
+#!/bin/bash
+
+DIR="/Users/patrik/work/LAMP/"
+docker-compose -f $DIR/docker-compose.ym exec -T db mysqldump -u root --password=root $1 > $2
