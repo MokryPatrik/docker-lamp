@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DIR="/Users/patrik/work/LAMP/bin/"
+DIR=$(readlink "$0")
+DIR=`dirname "$DIR"`
 
 php $DIR/../build/scripts/delete-vhost.php $1
 sudo php $DIR/../build/scripts/delete-host.php $1
