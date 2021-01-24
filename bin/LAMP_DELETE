@@ -5,4 +5,4 @@ DIR=`dirname "$DIR"`
 
 php $DIR/../build/scripts/delete-vhost.php $1
 sudo php $DIR/../build/scripts/delete-host.php $1
-sh $DIR/LAMP_R
+LAMP_R
