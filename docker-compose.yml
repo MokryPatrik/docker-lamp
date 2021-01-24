@@ -1,23 +1,44 @@
-web:
-  build: './build'
-  environment:
-    - ALLOW_OVERRIDE=true
-  ports:
-    - "80:80"
-  links:
-    - db
-  volumes:
-    - ./build/apache2/sites-enabled:/etc/apache2/sites-enabled
-    - ./src:/var/www/html
+version: "3.7"
 
-db:
-  image: mariadb
-  restart: always
-  volumes:
-    - ./db:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_USER: admin
-    MYSQL_PASSWORD: admin
-  ports:
-    - "8889:3306"
+networks:
+  lamp:
+
+services:
+  web:
+    build: './build'
+    environment:
+      - ALLOW_OVERRIDE=true
+    ports:
+      - "80:80"
+    links:
+      - db
+    volumes:
+      - ./build/apache2/sites-enabled:/etc/apache2/sites-enabled
+      - ./src:/var/www/html
+    networks:
+      - lamp
+
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "8889:3306"
+    networks:
+      - lamp
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_PORT: 3306
+      PMA_HOST: db
+    networks:
+      - lamp
