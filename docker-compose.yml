@@ -1,0 +1,23 @@
+web:
+  build: './build'
+  environment:
+    - ALLOW_OVERRIDE=true
+  ports:
+    - "80:80"
+  links:
+    - db
+  volumes:
+    - ./build/apache2/sites-enabled:/etc/apache2/sites-enabled
+    - ./src:/var/www/html
+
+db:
+  image: mariadb
+  restart: always
+  volumes:
+    - ./db:/var/lib/mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_USER: admin
+    MYSQL_PASSWORD: admin
+  ports:
+    - "8889:3306"

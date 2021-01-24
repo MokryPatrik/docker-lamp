@@ -1,0 +1,238 @@
+ErrorLog /var/log/apache2/error.log
+LogLevel warn
+CustomLog /var/log/apache2/access.log combined
+
+SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+
+
+Protocols h2 h2c http/1.1
+
+<VirtualHost _default_:80>
+  DocumentRoot /var/www/html/pub
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+  Header set Access-Control-Allow-Origin * "expr=%{REQUEST_URI} =~ m#^/static#"
+
+</VirtualHost>
+
+
+<VirtualHost _default_:443>
+  DocumentRoot /var/www/html/pub
+  Timeout 600
+
+  #RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
+  #ProxyPreserveHost       On
+  #ProxyPass               / http://varnish:6081/
+  #ProxyPassReverse        / http://varnish:6081/
+  
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  Header set Access-Control-Allow-Origin * "expr=%{REQUEST_URI} =~ m#^/static#"
+  SSLEngine on
+
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.botovo.cz
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "bot"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+  
+
+</VirtualHost>
+<VirtualHost *:443>
+  ServerName local.botovo.cz
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "bot"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+
+</VirtualHost>
+
+
+<VirtualHost *:80>
+  ServerName local.cipofalva.hu
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "cip"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+</VirtualHost>
+<VirtualHost *:443>
+  ServerName local.cipofalva.hu
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "cip"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+
+<VirtualHost *:80>
+  ServerName local.saxana.sk
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sax"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+</VirtualHost>
+<VirtualHost *:443>
+
+  ServerName local.saxana.sk
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sax"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.secretavenue.cz
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sec"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName local.secretavenue.cz
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sec"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.secretavenue.hu
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sec_hu"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName local.secretavenue.hu
+
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "sec_hu"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.pelimart.sk
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName local.pelimart.sk
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.pelimart.cz
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli_cz"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName local.pelimart.cz
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli_cz"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerName local.pelimart.hu
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli_hu"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SetEnvIf X-Forwarded-Proto https HTTPS=on
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName local.pelimart.hu
+  DocumentRoot /var/www/html/pub
+  SetEnv MAGE_RUN_CODE "peli_hu"
+  SetEnv MAGE_RUN_TYPE "website"
+  Timeout 600
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9001/var/www/html/pub/$1
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  SSLEngine on
+</VirtualHost>
+
+<Directory "/var/www/html">
+  Options Indexes FollowSymLinks
+  AllowOverride All
+  Require all granted
+  DirectoryIndex index.php
+</Directory>
